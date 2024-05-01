@@ -42,6 +42,7 @@ import io.thp.pyotherside 1.5
 
         Component.onCompleted: {
             addImportPath(Qt.resolvedUrl('.'));
+            console.log('in TidaApi.qml oncompleted')
 
 
             setHandler('get_url', function(newvalue) {
@@ -175,7 +176,7 @@ import io.thp.pyotherside 1.5
                 pythonApi.playlistAdded(id, title, image, num_tracks, description, duration)
             });
 
-            importModule('tidal', function () {});
+            importModule('tidal', function() {});
 
         }
 
@@ -198,16 +199,24 @@ import io.thp.pyotherside 1.5
             {
                 console.log("Valid login time");
                 //console.log(token_type.value, access_token.value, refresh_token.value, expiry_time.value);
+                console.log(token_type.value)
+                console.log(access_token.value)
                 call('tidal.Tidaler.login', [token_type.value, access_token.value, refresh_token.value, expiry_time.value], {});
             }
             else
             {
                 console.log("inValid login time");
+                console.log(token_type.value)
+                console.log(access_token.value)
                 //console.log(token_type.value, refresh_token.value, refresh_token.value, expiry_time.value);
                 call('tidal.Tidaler.login', [token_type.value, refresh_token.value, refresh_token.value, expiry_time.value], {});
                 console.log("Need to renew login")
             }
 
+        }
+
+        onError: {
+            console.log('ERROR - unhandled error received:', traceback);
         }
 
         function genericSearch(text) {
